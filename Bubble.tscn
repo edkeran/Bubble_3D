@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Bubble.gd" type="Script" id=1]
+
+[sub_resource type="SphereMesh" id=1]
+
+[sub_resource type="Shader" id=5]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx, async_visible;
+
+uniform vec3 colorDefault = vec3(1.000000, 1.000000, 1.000000);
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// Color:3
+	vec3 n_out3p0 = colorDefault;
+
+// Output:0
+	ALBEDO = n_out3p0;
+}
+
+void light() {
+// Output:0
+
+}
+"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 5 )
+shader_param/colorDefault = Vector3( 1, 1, 1 )
+
+[sub_resource type="SphereShape" id=6]
+
+[node name="Bubble" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Area" type="Area" parent="."]
+
+[node name="MeshInstance" type="MeshInstance" parent="Area"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 6 )
+
+[connection signal="area_shape_entered" from="Area" to="." method="_on_Area_area_shape_entered"]
