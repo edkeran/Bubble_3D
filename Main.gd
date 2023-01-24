@@ -46,11 +46,11 @@ func _input(event):
 		var y =  event.position.y - posScreen.y if (event.position.y - posScreen.y) != 0 else 0.1
 		var angle = rad2deg(atan(x/y)) 
 		get_node("BubbleGun").rotation_degrees.z = angle
-	if event is InputEventMouseButton:
-		if(bubbleShoot != null):
+	if event.is_action_pressed("shootBubble"):
+		if(bubbleShoot != null and !bubbleShoot.isMovingBall):
 			get_node("BubbleGun").get_node("ShootSound").play()
 			bubbleShoot.shoot_bubble()
 
 func _bubble_collided():
-	bubbleShoot.isShootBall = false
+
 	gen_bubble_shot()

@@ -22,7 +22,7 @@ dof_blur_far_quality = 0
 script = ExtResource( 3 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.423 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 32.423 )
 projection = 1
 size = 46.0
 near = 0.01
