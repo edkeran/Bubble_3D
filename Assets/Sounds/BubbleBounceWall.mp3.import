@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/BubbleBounceWall.mp3-30b9b92985f74e917557d00c7b3dbd80.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sounds/BubbleBounceWall.mp3"
+dest_files=[ "res://.import/BubbleBounceWall.mp3-30b9b92985f74e917557d00c7b3dbd80.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

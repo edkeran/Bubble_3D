@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
+[ext_resource path="res://WallCollition.tscn" type="PackedScene" id=1]
 [ext_resource path="res://BubbleGun.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Main.gd" type="Script" id=3]
 
 [sub_resource type="ProceduralSky" id=1]
 radiance_size = 0
 ground_curve = 0.0565687
+sun_color = Color( 0.705882, 0.301961, 0.301961, 1 )
 
 [sub_resource type="Environment" id=2]
 background_mode = 2
@@ -32,3 +34,9 @@ transform = Transform( 1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -19, 0 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 2 )
+
+[node name="RWall" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 6, 0, 0, 0, 0, 17.1, 0, 0 )
+
+[node name="LWall" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 6, 0, 0, 0, 0, -17.9, 0, 0 )
