@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/StartImages/LogoGame.svg" type="Texture" id=1]
+[ext_resource path="res://Assets/Fonts/Honey Bear.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://MainMenu.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 35
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 22
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 22
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 20
+use_filter = true
+font_data = ExtResource( 2 )
+
+[node name="GameMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="Title" type="Label" parent="."]
+margin_left = 114.0
+margin_top = 229.0
+margin_right = 391.0
+margin_bottom = 271.0
+custom_fonts/font = SubResource( 1 )
+text = "3D Bubble Shooter"
+
+[node name="Logo" type="TextureRect" parent="."]
+margin_left = 117.0
+margin_top = 28.0
+margin_right = 910.0
+margin_bottom = 1150.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 1 )
+stretch_mode = 3
+
+[node name="StartButton" type="Button" parent="."]
+margin_left = 79.0
+margin_top = 357.0
+margin_right = 424.0
+margin_bottom = 408.0
+custom_fonts/font = SubResource( 2 )
+text = "Iniciar Partida"
+
+[node name="ExitButton" type="Button" parent="."]
+margin_left = 147.0
+margin_top = 471.0
+margin_right = 336.0
+margin_bottom = 520.0
+custom_fonts/font = SubResource( 3 )
+text = "Salir"
+
+[node name="RtxMode" type="CheckBox" parent="."]
+margin_left = 145.0
+margin_top = 415.0
+margin_right = 330.0
+margin_bottom = 447.0
+custom_fonts/font = SubResource( 4 )
+text = "Activar modo \"RTX\""
+
+[connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="pressed" from="RtxMode" to="." method="_on_RtxMode_pressed"]

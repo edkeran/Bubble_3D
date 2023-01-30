@@ -30,4 +30,4 @@ func _on_Animacion_tween_completed(object, key):
 		if(currentIndex < logosRuta.size()):
 			loadImageTextCurren()
 		if(currentIndex == logosRuta.size()):
-			get_tree().change_scene("res://Main.tscn")
+			get_tree().change_scene("res://MainMenu.tscn")

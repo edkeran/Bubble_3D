@@ -1,5 +1,6 @@
 extends Spatial
 
+var isRtxMode = false
 var colorEnum = preload("res://color_enum.gd").color_enum.new()
 var sceneBubble = preload("res://Bubble.tscn")
 var randomObj = RandomNumberGenerator.new()
@@ -10,8 +11,13 @@ var offSet = Vector2(-15,21.0)
 var matrPosBub = []
 
 func _ready():
+	if(isRtxMode):
+		load_rtx_mode()
 	gen_init_game()
 	gen_bubble_shot()
+	
+func load_rtx_mode():
+	$Camera.set_projection(0)
 	
 func gen_init_game():
 	var correFila = false
@@ -20,7 +26,6 @@ func gen_init_game():
 		correFila = not correFila
 		gen_row_bubble(j, correFila)
 		j+= 2.0 + bordeBurbuja
-	pass
 
 func gen_bubble_shot():
 	bubbleShoot = gen_bubble(0,4.2, false)
@@ -44,6 +49,9 @@ func gen_bubble(x,y,correFila):
 	var materialBubble = bubble.get_node("MeshInstance").get_surface_material(0)
 	materialBubble = materialBubble.duplicate()
 	materialBubble.set_shader_param("colorDefault",colorEnum.arrColor[pos])
+	if(isRtxMode):
+		materialBubble.set_shader_param("roughnessMode", 0.2)
+		materialBubble.set_shader_param("specularBrigth", 0.4)
 	bubble.get_node("MeshInstance").set_surface_material(0,materialBubble)
 	var newPos
 	if(correFila):
