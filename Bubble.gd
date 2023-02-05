@@ -8,6 +8,7 @@ var angleRotationShoot
 var offSetInit = Vector2(-16.8,24.4)
 var radius = 1.2
 var globalGridPos = Vector2(-1, -1)
+var currentColor
 
 signal bubble_collide(bubbleObj)
 
@@ -52,7 +53,6 @@ func _fix_to_grid_position():
 	var posYGrid = round_to_dec(round_to_dec(offSetInit.y - yPosition,2),1)
 	posYGrid = int(round(posYGrid/(radius*2)) - 1)
 	self.translation.y = (offSetInit.y - (posYGrid * radius * 2)) - radius 
-	print(posYGrid)
 	var posXGrid = -1
 	if(posYGrid % 2 == 0):
 		posXGrid = round_to_dec(round_to_dec(abs(offSetInit.x) + xPosition,2),1) + radius
@@ -62,7 +62,6 @@ func _fix_to_grid_position():
 		posXGrid = round_to_dec(round_to_dec(abs(offSetInit.x) + xPosition,2),1)
 		posXGrid = int(abs(round(posXGrid/(radius*2))))
 		self.translation.x = (offSetInit.x + (posXGrid * radius * 2))
-	print(posXGrid)
 	globalGridPos.x = posXGrid
 	globalGridPos.y = posYGrid
 

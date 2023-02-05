@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/Fonts/Honey Bear.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Assets/StartImages/endHappyFace.svg" type="Texture" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 31
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 24
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 29
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 26
+use_filter = true
+font_data = ExtResource( 1 )
+
+[node name="GameOver" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = 2.0
+
+[node name="OverMessage" type="Label" parent="."]
+margin_left = 12.0
+margin_top = 24.0
+margin_right = 470.0
+margin_bottom = 62.0
+custom_fonts/font = SubResource( 1 )
+text = "Has perdido intentalo nuevamente"
+
+[node name="FinalScoreMessage" type="Label" parent="."]
+margin_left = 113.0
+margin_top = 313.0
+margin_right = 365.0
+margin_bottom = 342.0
+custom_fonts/font = SubResource( 2 )
+text = "Su puntaje final ha sido:"
+
+[node name="FinalScore" type="Label" parent="."]
+margin_left = 231.0
+margin_top = 350.0
+margin_right = 304.0
+margin_bottom = 389.0
+custom_fonts/font = SubResource( 3 )
+text = "0"
+
+[node name="BackMenu" type="Button" parent="."]
+margin_left = 131.0
+margin_top = 481.0
+margin_right = 332.0
+margin_bottom = 525.0
+custom_fonts/font = SubResource( 4 )
+text = "Volver al inicio"
+
+[node name="endHappyFace" type="TextureRect" parent="."]
+margin_left = 126.0
+margin_top = 100.0
+margin_right = 522.0
+margin_bottom = 440.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
+stretch_mode = 1
