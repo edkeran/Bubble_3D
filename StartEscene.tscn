@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Assets/StartImages/LogoGame.svg" type="Texture" id=1]
 [ext_resource path="res://StartBubble3D.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Fonts/Honey Bear.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 44
+use_filter = true
+font_data = ExtResource( 3 )
 
 [node name="StartGame" type="Node2D"]
 script = ExtResource( 2 )
@@ -19,7 +25,7 @@ margin_left = 102.0
 margin_top = 389.0
 margin_right = 201.0
 margin_bottom = 403.0
-rect_scale = Vector2( 3, 3 )
+custom_fonts/font = SubResource( 1 )
 text = "Wolfcat Studios"
 
 [node name="Animacion" type="Tween" parent="."]

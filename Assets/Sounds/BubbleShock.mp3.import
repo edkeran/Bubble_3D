@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/BubbleShock.mp3-fa2fead82ed5303dc5923edc98625fb2.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sounds/BubbleShock.mp3"
+dest_files=[ "res://.import/BubbleShock.mp3-fa2fead82ed5303dc5923edc98625fb2.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

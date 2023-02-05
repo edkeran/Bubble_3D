@@ -8,7 +8,7 @@ var currentIndex = 0
 
 func _ready():
 	loadImageTextCurren()
-	
+
 func loadImageTextCurren():
 	$CurrentText.text = textLogo[currentIndex]
 	$CurrentLogo.rect_position.y = positionLabel[currentIndex]
@@ -22,7 +22,6 @@ func loadImageTextCurren():
 	  Color(1, 1, 1, 0), Color(1, 1, 1, 1), 2.0, 
 	  Tween.TRANS_LINEAR, Tween.EASE_IN)
 	$Animacion.start()
-
 
 func _on_Animacion_tween_completed(object, key):
 	if(object == $CurrentLogo):

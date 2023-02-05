@@ -3,6 +3,10 @@
 [ext_resource path="res://Bubble.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sounds/BubbleBounceWall.mp3" type="AudioStream" id=2]
 
+[sub_resource type="SphereShape" id=6]
+margin = 0.001
+radius = 1.2
+
 [sub_resource type="SphereMesh" id=1]
 
 [sub_resource type="SpatialMaterial" id=7]
@@ -38,23 +42,16 @@ shader_param/colorDefault = Color( 1, 1, 1, 1 )
 shader_param/roughnessMode = 0.0
 shader_param/specularBrigth = 0.0
 
-[sub_resource type="SphereShape" id=6]
-radius = 1.2
-
-[node name="Bubble" type="Spatial"]
+[node name="Bubble" type="KinematicBody"]
 script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 6 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
-skeleton = NodePath("Area")
+skeleton = NodePath("")
 material/0 = SubResource( 4 )
-
-[node name="Area" type="Area" parent="MeshInstance"]
-
-[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/Area"]
-shape = SubResource( 6 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
-
-[connection signal="area_entered" from="MeshInstance/Area" to="." method="_on_Area_area_entered"]

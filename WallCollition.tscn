@@ -1,19 +1,18 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://WallArea.gd" type="Script" id=1]
-
-[sub_resource type="CubeMesh" id=1]
+[ext_resource path="res://WallBody.gd" type="Script" id=1]
 
 [sub_resource type="BoxShape" id=2]
 
-[node name="Pared" type="Spatial"]
+[sub_resource type="CubeMesh" id=1]
+
+[node name="Pared" type="KinematicBody"]
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 0.3, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0 )
+shape = SubResource( 2 )
 
 [node name="MeshParedArea" type="CSGMesh" parent="."]
 transform = Transform( 0.3, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 1 )
-
-[node name="Area" type="Area" parent="MeshParedArea"]
-script = ExtResource( 1 )
-
-[node name="CollisionShape" type="CollisionShape" parent="MeshParedArea/Area"]
-shape = SubResource( 2 )

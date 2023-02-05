@@ -1,19 +1,21 @@
-extends Spatial
+extends KinematicBody
 
 var isShootBall = false
 var isMovingBall = false
-var velocity = 45
+var velocity = 40
 var maxVelocity = 75
 var angleRotationShoot
-var posAnt = Vector2(0,0)
+var offSetInit = Vector2(-16.8,24.4)
+var radius = 1.2
+var globalGridPos = Vector2(-1, -1)
 
-signal bubble_collide
+signal bubble_collide(bubbleObj)
 
 func _physics_process(delta):
 	if(isMovingBall):
-		posAnt = Vector2(self.translation.x, self.translation.y)
-		self.translation.x += cos(deg2rad(angleRotationShoot+90)) * delta * velocity
-		self.translation.y += abs(sin(deg2rad(angleRotationShoot+90))) * delta * velocity
+		var collision = self.move_and_collide(Vector3(cos(deg2rad(angleRotationShoot+90)) * delta * velocity, abs(sin(deg2rad(angleRotationShoot+90))) * delta * velocity, 0))
+		if collision:
+			_is_collided_action(collision.collider)
 
 func shoot_bubble():
 	if(not isMovingBall):
@@ -24,18 +26,45 @@ func shoot_bubble():
 		get_parent().remove_child(self)
 		self.translation = position
 		new_parent.add_child(self, true)
-		
-func _on_Area_area_entered(area):
+
+func _is_collided_action(area):
 	if(isShootBall and not("isWall" in area)):
 		isShootBall = false
 		isMovingBall = false
-		self.translation.z = 0
-		self.translation.x = posAnt.x 
-		self.translation.y = posAnt.y
-		self.velocity = 0
-		emit_signal("bubble_collide")
-	elif("isWall" in area):
+		var audio2 = load("res://Assets/Sounds/BubbleShock.mp3")
+		$AudioStreamPlayer.stream = audio2
 		$AudioStreamPlayer.play()
-		angleRotationShoot= angleRotationShoot*-1
+		_fix_to_grid_position()
+		emit_signal("bubble_collide", self)
+	elif("isWall" in area):
+		var audio = load("res://Assets/Sounds/BubbleBounceWall.mp3")
+		$AudioStreamPlayer.stream = audio
+		$AudioStreamPlayer.play()
+		var directionX = cos(deg2rad(angleRotationShoot+90))
+		angleRotationShoot = -45 if directionX < 0 else 45
 		if(velocity < maxVelocity):
 			velocity+=5
+
+func _fix_to_grid_position():
+	var xPosition = self.translation.x
+	var yPosition = self.translation.y - radius
+	#check the closest row with this i know the index in the grid
+	var posYGrid = round_to_dec(round_to_dec(offSetInit.y - yPosition,2),1)
+	posYGrid = int(round(posYGrid/(radius*2)) - 1)
+	self.translation.y = (offSetInit.y - (posYGrid * radius * 2)) - radius 
+	print(posYGrid)
+	var posXGrid = -1
+	if(posYGrid % 2 == 0):
+		posXGrid = round_to_dec(round_to_dec(abs(offSetInit.x) + xPosition,2),1) + radius
+		posXGrid = int(abs(round(posXGrid/(radius*2))))
+		self.translation.x = (offSetInit.x + (posXGrid * radius * 2)) - radius
+	else:
+		posXGrid = round_to_dec(round_to_dec(abs(offSetInit.x) + xPosition,2),1)
+		posXGrid = int(abs(round(posXGrid/(radius*2))))
+		self.translation.x = (offSetInit.x + (posXGrid * radius * 2))
+	print(posXGrid)
+	globalGridPos.x = posXGrid
+	globalGridPos.y = posYGrid
+
+func round_to_dec(num, digit):
+	return round(num * pow(10.0, digit)) / pow(10.0, digit)

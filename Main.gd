@@ -4,28 +4,40 @@ var isRtxMode = false
 var colorEnum = preload("res://color_enum.gd").color_enum.new()
 var sceneBubble = preload("res://Bubble.tscn")
 var randomObj = RandomNumberGenerator.new()
-var bordeBurbuja = 0.2
-var bubbleShoot;
-#La posicion -15 representa la posicion inicial de una fila en 3D y la 21 representa la Y inicial en 3D
-var offSet = Vector2(-15,21.0)
+var radioBurbuja = 1.2
+var bubbleShoot
+#La posicion -15 representa la posicion inicial de una fila en 3D y la 24.4 representa la Y inicial en 3D
+var offSet = Vector2(-16.8,24.4)
 var matrPosBub = []
 
 func _ready():
 	if(isRtxMode):
 		load_rtx_mode()
+	fill_empty_mat()
 	gen_init_game()
 	gen_bubble_shot()
 	
 func load_rtx_mode():
 	$Camera.set_projection(0)
-	
+
+func fill_empty_mat():
+	for i in range(0,14):
+		var arrY = []
+		for j in range(0,15):
+			arrY.append(null)
+		matrPosBub.append(arrY)
+
 func gen_init_game():
 	var correFila = false
-	var j = 0;
-	while(j <= 13.0 + bordeBurbuja):
+	var j=0.0
+	var cantRows = 4
+	var currentY = offSet.y - radioBurbuja
+	while(j < cantRows):
 		correFila = not correFila
-		gen_row_bubble(j, correFila)
-		j+= 2.0 + bordeBurbuja
+		var rowBubbles = gen_row_bubble(currentY, correFila)
+		matrPosBub[int(j)] = rowBubbles
+		currentY-=radioBurbuja*2
+		j+=1
 
 func gen_bubble_shot():
 	bubbleShoot = gen_bubble(0,4.2, false)
@@ -35,13 +47,18 @@ func gen_bubble_shot():
 	bubbleShoot.connect("bubble_collide", self, "_bubble_collided")
 
 func gen_row_bubble(y, correFila):
-	var i = offSet.x - bordeBurbuja
-	while(i <= 17.0 + bordeBurbuja):
+	var bubbleLstCreated = []
+	var i = 0.0
+	var cantCols = 15
+	var currentX = 0.0
+	while(i < cantCols):
 		randomObj.randomize()
-		var yPos = offSet.y - bordeBurbuja - y
-		var bubble = gen_bubble(i,yPos, correFila)
+		var bubble = gen_bubble(currentX+offSet.x,y, correFila)
 		add_child(bubble)
-		i+=2.0 + bordeBurbuja
+		currentX+=radioBurbuja*2
+		bubbleLstCreated.append(bubble)
+		i+=1
+	return bubbleLstCreated
 
 func gen_bubble(x,y,correFila):
 	var pos = randomObj.randi_range(0,4)
@@ -50,12 +67,12 @@ func gen_bubble(x,y,correFila):
 	materialBubble = materialBubble.duplicate()
 	materialBubble.set_shader_param("colorDefault",colorEnum.arrColor[pos])
 	if(isRtxMode):
-		materialBubble.set_shader_param("roughnessMode", 0.2)
-		materialBubble.set_shader_param("specularBrigth", 0.4)
+		materialBubble.set_shader_param("roughnessMode", 0.3)
+		materialBubble.set_shader_param("specularBrigth", 0.7)
 	bubble.get_node("MeshInstance").set_surface_material(0,materialBubble)
 	var newPos
 	if(correFila):
-		newPos = Vector3(x-1,y,0)
+		newPos = Vector3(x-radioBurbuja,y,0)
 	else:
 		newPos = Vector3(x,y,0)
 	bubble.translate(newPos)
@@ -73,5 +90,7 @@ func _input(event):
 			get_node("BubbleGun").get_node("ShootSound").play()
 			bubbleShoot.shoot_bubble()
 
-func _bubble_collided():
+func _bubble_collided(bubbleObj):
+	#It must be added the bubble in the main bubble reference matrix
+	matrPosBub[bubbleObj.globalGridPos.y][bubbleObj.globalGridPos.x] = bubbleObj
 	gen_bubble_shot()
