@@ -6,7 +6,7 @@ var sceneBubble = preload("res://Bubble.tscn")
 var randomObj = RandomNumberGenerator.new()
 var radioBurbuja = 1.2
 var bubbleShoot
-#La posicion -15 representa la posicion inicial de una fila en 3D y la 24.4 representa la Y inicial en 3D
+#La posicion -16.8 representa la posicion inicial de una fila en 3D y la 24.4 representa la Y inicial en 3D
 var offSet = Vector2(-16.8,24.4)
 var matrPosBub = []
 var correFila = false
@@ -116,7 +116,7 @@ func getClusterSameColor(matrixCluster, ball):
 	var evenBallVert = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1]]
 	var oddBallVert =  [[0,1],[0,-1],[1,0],[-1,0],[-1,-1],[1,-1]]
 	var selectedPosition
-	if(int(ball.globalGridPos.y) % 2 == 1):
+	if(int(ball.globalGridPos.y) % 2 == ( 1 if correFila == false else 0)):
 		selectedPosition = evenBallVert
 	else:
 		selectedPosition = oddBallVert

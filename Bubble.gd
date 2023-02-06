@@ -41,12 +41,12 @@ func _is_collided_action(area):
 		var audio = load("res://Assets/Sounds/BubbleBounceWall.mp3")
 		$AudioStreamPlayer.stream = audio
 		$AudioStreamPlayer.play()
-		var directionX = cos(deg2rad(angleRotationShoot+90))
-		angleRotationShoot = -45 if directionX < 0 else 45
+		angleRotationShoot = angleRotationShoot * -1
 		if(velocity < maxVelocity):
 			velocity+=5
 
 func _fix_to_grid_position():
+	var currentXMove = get_parent().correFila
 	var xPosition = self.translation.x
 	var yPosition = self.translation.y - radius
 	#check the closest row with this i know the index in the grid
@@ -54,7 +54,7 @@ func _fix_to_grid_position():
 	posYGrid = int(round(posYGrid/(radius*2)) - 1)
 	self.translation.y = (offSetInit.y - (posYGrid * radius * 2)) - radius 
 	var posXGrid = -1
-	if(posYGrid % 2 == 0):
+	if(posYGrid % 2 == ( 0 if currentXMove == false else 1)):
 		posXGrid = round_to_dec(round_to_dec(abs(offSetInit.x) + xPosition,2),1) + radius
 		posXGrid = int(abs(round(posXGrid/(radius*2))))
 		self.translation.x = (offSetInit.x + (posXGrid * radius * 2)) - radius

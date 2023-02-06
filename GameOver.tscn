@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/Fonts/Honey Bear.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Assets/StartImages/endHappyFace.svg" type="Texture" id=2]
 [ext_resource path="res://Assets/Sounds/GameOverSong.mp3" type="AudioStream" id=3]
+[ext_resource path="res://GameOver.gd" type="Script" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 31
@@ -30,6 +31,7 @@ margin_left = -2.0
 margin_top = 2.0
 margin_right = -2.0
 margin_bottom = 2.0
+script = ExtResource( 4 )
 
 [node name="OverMessage" type="Label" parent="."]
 margin_left = 12.0
@@ -75,3 +77,5 @@ stretch_mode = 1
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 autoplay = true
+
+[connection signal="pressed" from="BackMenu" to="." method="_on_BackMenu_pressed"]
