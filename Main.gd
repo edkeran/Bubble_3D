@@ -149,9 +149,9 @@ func removeClustersNeightbores(cluster):
 
 #Function to generate a top bubble each time
 func _gen_top_row():
-	#move_bubbles_rows_down()
-	#_fills_firts_row()
-	#correFila = not correFila
+	move_bubbles_rows_down()
+	_fills_firts_row()
+	correFila = not correFila
 	pass
 
 func _fills_firts_row():
@@ -177,6 +177,9 @@ func move_bubbles_rows_down():
 				matrPosBub[i][j].globalGridPos.y = i + 1
 				var bubbleCurrent = matrPosBub[i][j]
 				matrPosBub[i][j] = null
+				if(i+1 > 13):
+					_game_over()
+					return
 				matrPosBub[i+1][j] = bubbleCurrent
 			j-=1 
 		i-=1

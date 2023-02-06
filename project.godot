@@ -18,6 +18,7 @@ config/icon="res://Assets/StartImages/LogoGame.png"
 
 window/size/width=480
 window/size/height=640
+window/size/fullscreen=true
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
