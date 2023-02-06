@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Fonts/Honey Bear.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Assets/StartImages/endHappyFace.svg" type="Texture" id=2]
+[ext_resource path="res://Assets/Sounds/GameOverSong.mp3" type="AudioStream" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 31
@@ -70,3 +71,7 @@ margin_bottom = 440.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 stretch_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+autoplay = true
