@@ -85,4 +85,6 @@ autoplay = "StretchBall"
 anims/RESET = SubResource( 2 )
 anims/StretchBall = SubResource( 3 )
 
+[node name="ChangeBubble" type="AudioStreamPlayer" parent="."]
+
 [connection signal="timeout" from="TimerNewRow" to="." method="_gen_top_row"]

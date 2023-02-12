@@ -35,7 +35,7 @@ func load_rtx_mode():
 	$WolfCatShadow.translation.x += 3
 	
 func fill_empty_mat():
-	for i in range(0,14):
+	for i in range(0,15):
 		var arrY = []
 		for j in range(0,15):
 			arrY.append(null)
@@ -142,6 +142,7 @@ func _bubble_collided(bubbleObj):
 	matrPosBub[bubbleObj.globalGridPos.y][bubbleObj.globalGridPos.x] = bubbleObj
 	var cluster = getClusterSameColor([],bubbleObj)
 	if(cluster.size() >=3):
+		#We must search the neigthbores of the remove items to check clusters without rooft 
 		$ScoreCount.score+= 5 + (2 *  (cluster.size() - 3))
 		$ScoreCount.uploadScore()
 	removeClustersNeightbores(cluster)
@@ -232,6 +233,8 @@ func change_bubble_to_next():
 			bubbleNext.get_node("MeshInstance").get_surface_material(0).set_shader_param("indexColorMain",colorNextBall)
 			bubbleNext.currentColor = colorEnum.arrColor[colorNextBall]
 			currentParticuleBubble.get_children()[0].process_material.color = Color(bubbleNext.currentColor.x,bubbleNext.currentColor.y,bubbleNext.currentColor.z,1)
+			$ChangeBubble.stream = load("res://Assets/Sounds/BubbleShock.mp3")
+			$ChangeBubble.play()
 
 func _game_over():
 	var scena = load("res://GameOver.tscn").instance()

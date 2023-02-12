@@ -59,6 +59,8 @@ func _fix_to_grid_position():
 		posXGrid = int(abs(round(posXGrid/(radius*2))))
 		self.translation.x = (offSetInit.x + (posXGrid * radius * 2)) - radius
 	else:
+		if(xPosition < offSetInit.x):
+			xPosition = offSetInit.x
 		posXGrid = round_to_dec(round_to_dec(abs(offSetInit.x) + xPosition,2),1)
 		posXGrid = int(abs(round(posXGrid/(radius*2))))
 		self.translation.x = (offSetInit.x + (posXGrid * radius * 2))
