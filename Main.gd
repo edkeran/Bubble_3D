@@ -10,6 +10,10 @@ var bubbleShoot
 var offSet = Vector2(-16.8,24.4)
 var matrPosBub = []
 var correFila = false
+var colorNextBall
+var bubbleNext
+var currentParticuleBubble
+var shooting = false
 
 func _ready():
 	var songGame = AudioStreamPlayer.new()
@@ -23,10 +27,12 @@ func _ready():
 	fill_empty_mat()
 	gen_init_game()
 	gen_bubble_shot()
+	gen_bubble_next_color()
 
 func load_rtx_mode():
-	$Camera.translation.z = 37
+	$Camera.translation.z = 36
 	$Camera.set_projection(0)
+	$WolfCatShadow.translation.x += 3
 	
 func fill_empty_mat():
 	for i in range(0,14):
@@ -52,6 +58,8 @@ func gen_bubble_shot():
 	get_node("BubbleGun").add_child(bubbleShoot, false)
 	bubbleShoot.isShootBall = true
 	bubbleShoot.connect("bubble_collide", self, "_bubble_collided")
+	colorNextBall = randomObj.randi_range(0,4)
+	gen_bubble_next_color()
 
 func gen_row_bubble(y,j,correFila):
 	var bubbleLstCreated = []
@@ -60,6 +68,7 @@ func gen_row_bubble(y,j,correFila):
 	var currentX = 0.0
 	while(i < cantCols):
 		randomObj.randomize()
+		colorNextBall = randomObj.randi_range(0,4)
 		var bubble = gen_bubble(currentX+offSet.x,y,j,i,correFila)
 		add_child(bubble)
 		currentX+=radioBurbuja*2
@@ -67,12 +76,35 @@ func gen_row_bubble(y,j,correFila):
 		i+=1
 	return bubbleLstCreated
 
+func gen_bubble_next_color():
+	if(bubbleNext != null):
+		bubbleNext.queue_free()
+	if(currentParticuleBubble != null):
+		currentParticuleBubble.queue_free()
+	bubbleNext = gen_bubble(6,-15,0,0,false)
+	bubbleNext.get_node("CollisionShape").queue_free()
+	currentParticuleBubble = gen_particule_itm(bubbleNext)
+	self.add_child(bubbleNext)
+	
+func gen_particule_itm(bubbleNext):
+	var particuleEscene = load("res://ParticuleBub.tscn").instance()
+	particuleEscene.end_auto = false
+	particuleEscene.translation.x = bubbleNext.translation.x
+	particuleEscene.translation.y = bubbleNext.translation.y
+	particuleEscene.translation.z = 0
+	particuleEscene.scale.x = 2
+	particuleEscene.scale.y = 2
+	particuleEscene.get_children()[0].process_material = particuleEscene.get_children()[0].process_material.duplicate()
+	particuleEscene.get_children()[0].process_material.color = Color(bubbleNext.currentColor.x,bubbleNext.currentColor.y,bubbleNext.currentColor.z,1)
+	self.add_child(particuleEscene)
+	return particuleEscene
+	
 func gen_bubble(x,y,j,i,correFila):
-	var pos = randomObj.randi_range(0,4)
 	var bubble = sceneBubble.instance()
 	var materialBubble = bubble.get_node("MeshInstance").get_surface_material(0)
 	materialBubble = materialBubble.duplicate()
-	materialBubble.set_shader_param("colorDefault",colorEnum.arrColor[pos])
+	materialBubble.set_shader_param("colorDefault",colorEnum.arrColor[colorNextBall])
+	materialBubble.set_shader_param("indexColorMain",colorNextBall)
 	if(isRtxMode):
 		materialBubble.set_shader_param("roughnessMode", 0.3)
 		materialBubble.set_shader_param("specularBrigth", 0.7)
@@ -85,7 +117,7 @@ func gen_bubble(x,y,j,i,correFila):
 	bubble.translate(newPos)
 	bubble.globalGridPos.y = j
 	bubble.globalGridPos.x = i
-	bubble.currentColor = colorEnum.arrColor[pos]
+	bubble.currentColor = colorEnum.arrColor[colorNextBall]
 	return bubble
 
 func _input(event):
@@ -99,6 +131,9 @@ func _input(event):
 		if(bubbleShoot != null and !bubbleShoot.isMovingBall):
 			get_node("BubbleGun").get_node("ShootSound").play()
 			bubbleShoot.shoot_bubble()
+			shooting = true
+	if event.is_action_pressed("changeBubble"):
+		change_bubble_to_next()
 
 func _bubble_collided(bubbleObj):
 	if(bubbleObj.globalGridPos.y > 13 or bubbleObj.globalGridPos.x > 14):
@@ -110,6 +145,7 @@ func _bubble_collided(bubbleObj):
 		$ScoreCount.score+= 5 + (2 *  (cluster.size() - 3))
 		$ScoreCount.uploadScore()
 	removeClustersNeightbores(cluster)
+	shooting = false
 	gen_bubble_shot()
 
 func getClusterSameColor(matrixCluster, ball):
@@ -149,9 +185,9 @@ func removeClustersNeightbores(cluster):
 
 #Function to generate a top bubble each time
 func _gen_top_row():
-	move_bubbles_rows_down()
-	_fills_firts_row()
-	correFila = not correFila
+	#move_bubbles_rows_down()
+	#_fills_firts_row()
+	#correFila = not correFila
 	pass
 
 func _fills_firts_row():
@@ -184,8 +220,22 @@ func move_bubbles_rows_down():
 			j-=1 
 		i-=1
 
+func change_bubble_to_next():
+	if(!shooting):
+		var newCurrentColor = int(colorNextBall)/1
+		colorNextBall = bubbleShoot.get_node("MeshInstance").get_surface_material(0).get_shader_param("indexColorMain")
+		bubbleShoot.get_node("MeshInstance").get_surface_material(0).set_shader_param("colorDefault",colorEnum.arrColor[newCurrentColor])
+		bubbleShoot.get_node("MeshInstance").get_surface_material(0).set_shader_param("indexColorMain",newCurrentColor)
+		bubbleShoot.currentColor = colorEnum.arrColor[newCurrentColor]
+		if(bubbleNext != null):
+			bubbleNext.get_node("MeshInstance").get_surface_material(0).set_shader_param("colorDefault",colorEnum.arrColor[colorNextBall])
+			bubbleNext.get_node("MeshInstance").get_surface_material(0).set_shader_param("indexColorMain",colorNextBall)
+			bubbleNext.currentColor = colorEnum.arrColor[colorNextBall]
+			currentParticuleBubble.get_children()[0].process_material.color = Color(bubbleNext.currentColor.x,bubbleNext.currentColor.y,bubbleNext.currentColor.z,1)
+
 func _game_over():
 	var scena = load("res://GameOver.tscn").instance()
+	scena.finalScore = $ScoreCount.score
 	$AudioStreamPlayer3D.stop()
 	get_tree().get_root().add_child(scena)
 	get_tree().get_root().remove_child(self)

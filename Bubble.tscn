@@ -23,6 +23,7 @@ render_mode specular_schlick_ggx, async_visible;
 uniform vec3 colorDefault = vec3(1.000000, 1.000000, 1.000000);
 uniform float roughnessMode = 0.0;
 uniform float specularBrigth = 0.0;
+uniform int indexColorMain;
 
 void fragment() {
 	ALBEDO = colorDefault;
@@ -41,6 +42,7 @@ shader = SubResource( 5 )
 shader_param/colorDefault = Color( 1, 1, 1, 1 )
 shader_param/roughnessMode = 0.0
 shader_param/specularBrigth = 0.0
+shader_param/indexColorMain = null
 
 [node name="Bubble" type="KinematicBody"]
 script = ExtResource( 1 )

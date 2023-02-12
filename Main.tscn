@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://WallCollition.tscn" type="PackedScene" id=1]
 [ext_resource path="res://BubbleGun.tscn" type="PackedScene" id=2]
@@ -6,25 +6,57 @@
 [ext_resource path="res://Roof.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/Sounds/bubblePop.mp3" type="AudioStream" id=5]
 [ext_resource path="res://ScoreScene.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/Decorate/wolfCatShadow.svg" type="Texture" id=7]
 
 [sub_resource type="Environment" id=1]
 background_mode = 1
 background_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
 
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0.8, 0.8, 0.5 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "StretchBall"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0.8, 0.8, 0.5 ), Vector3( 0.4, 0.8, 0.5 ) ]
+}
+
 [node name="Main" type="Spatial"]
 script = ExtResource( 3 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 32.43 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.878495, 0, 32.43 )
 projection = 1
-size = 51.0
+size = 50.0
 near = 0.01
 
 [node name="BubbleGun" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -19, 0 )
 
 [node name="RWall" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 6, 0, 0, 0, 0, 19.1374, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 6, 0, 0, 0, 0, 18.1, 0, 0 )
 
 [node name="LWall" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 6, 0, 0, 0, 0, -19.8668, 0, 0 )
@@ -43,5 +75,14 @@ stream = ExtResource( 5 )
 [node name="TimerNewRow" type="Timer" parent="."]
 wait_time = 6.0
 autostart = true
+
+[node name="WolfCatShadow" type="Sprite3D" parent="."]
+transform = Transform( 0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.5, 9.35616, -19.1243, -7.33634 )
+texture = ExtResource( 7 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="WolfCatShadow"]
+autoplay = "StretchBall"
+anims/RESET = SubResource( 2 )
+anims/StretchBall = SubResource( 3 )
 
 [connection signal="timeout" from="TimerNewRow" to="." method="_gen_top_row"]

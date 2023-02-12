@@ -67,6 +67,7 @@ margin_top = 415.0
 margin_right = 330.0
 margin_bottom = 447.0
 custom_fonts/font = SubResource( 4 )
+pressed = true
 text = "Activar modo \"RTX\""
 
 [connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]

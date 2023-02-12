@@ -1,8 +1,9 @@
 extends Control
 
-var isRtxMode = false
+var isRtxMode = true
 var sceneGame = preload("res://Main.tscn")
 signal stopSong
+
 
 func _on_StartButton_pressed():
 	var scena = sceneGame.instance()
