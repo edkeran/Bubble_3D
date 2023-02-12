@@ -143,11 +143,16 @@ func _bubble_collided(bubbleObj):
 	var cluster = getClusterSameColor([],bubbleObj)
 	if(cluster.size() >=3):
 		#We must search the neigthbores of the remove items to check clusters without rooft 
+		findNeigthboursBubblesRemove(cluster)
 		$ScoreCount.score+= 5 + (2 *  (cluster.size() - 3))
 		$ScoreCount.uploadScore()
 	removeClustersNeightbores(cluster)
 	shooting = false
 	gen_bubble_shot()
+	
+func findNeigthboursBubblesRemove(clusterItemsRemove):
+	var matrixNeigthbores = []
+	pass
 
 func getClusterSameColor(matrixCluster, ball):
 	var evenBallVert = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1]]
