@@ -2,6 +2,7 @@ extends Control
 
 var isRtxMode = true
 var sceneGame = preload("res://Main.tscn")
+var fullScreen = false
 signal stopSong
 
 
@@ -17,3 +18,8 @@ func _on_ExitButton_pressed():
 
 func _on_RtxMode_pressed():
 	isRtxMode = not isRtxMode
+
+
+func _on_FullScreen_pressed():
+	fullScreen = not fullScreen
+	OS.window_fullscreen = fullScreen

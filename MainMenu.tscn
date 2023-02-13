@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/StartImages/LogoGame.svg" type="Texture" id=1]
 [ext_resource path="res://Assets/Fonts/Honey Bear.ttf" type="DynamicFontData" id=2]
@@ -16,6 +16,7 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 22
+use_filter = true
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=4]
@@ -23,9 +24,15 @@ size = 20
 use_filter = true
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=5]
+size = 18
+use_filter = true
+font_data = ExtResource( 2 )
+
 [node name="GameMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_scale = Vector2( 0.994202, 1 )
 script = ExtResource( 3 )
 
 [node name="Title" type="Label" parent="."]
@@ -70,6 +77,15 @@ custom_fonts/font = SubResource( 4 )
 pressed = true
 text = "Activar modo \"RTX\""
 
+[node name="FullScreen" type="CheckBox" parent="."]
+margin_left = 145.846
+margin_top = 440.0
+margin_right = 382.846
+margin_bottom = 470.0
+custom_fonts/font = SubResource( 5 )
+text = "Activar Pantalla Completa"
+
 [connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_ExitButton_pressed"]
 [connection signal="pressed" from="RtxMode" to="." method="_on_RtxMode_pressed"]
+[connection signal="pressed" from="FullScreen" to="." method="_on_FullScreen_pressed"]
