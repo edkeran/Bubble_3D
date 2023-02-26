@@ -73,7 +73,7 @@ stream = ExtResource( 5 )
 [node name="ScoreCount" parent="." instance=ExtResource( 6 )]
 
 [node name="TimerNewRow" type="Timer" parent="."]
-wait_time = 6.0
+wait_time = 14.0
 autostart = true
 
 [node name="WolfCatShadow" type="Sprite3D" parent="."]

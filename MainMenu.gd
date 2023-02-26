@@ -5,7 +5,6 @@ var sceneGame = preload("res://Main.tscn")
 var fullScreen = false
 signal stopSong
 
-
 func _on_StartButton_pressed():
 	var scena = sceneGame.instance()
 	scena.isRtxMode = self.isRtxMode
