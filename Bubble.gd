@@ -8,6 +8,8 @@ var angleRotationShoot
 var offSetInit = Vector2(-16.8,24.4)
 var radius = 1.2
 var globalGridPos = Vector2(-1, -1)
+var gravity = 24
+var isRemoveGravityBubble = false
 var currentColor
 
 signal bubble_collide(bubbleObj)
@@ -17,6 +19,8 @@ func _physics_process(delta):
 		var collision = self.move_and_collide(Vector3(cos(deg2rad(angleRotationShoot+90)) * delta * velocity, abs(sin(deg2rad(angleRotationShoot+90))) * delta * velocity, 0))
 		if collision:
 			_is_collided_action(collision.collider)
+	if(not isMovingBall and isRemoveGravityBubble):
+		self.move_and_collide(Vector3(0,-1,0)*delta*gravity)
 
 func shoot_bubble():
 	if(not isMovingBall):
@@ -69,3 +73,7 @@ func _fix_to_grid_position():
 
 func round_to_dec(num, digit):
 	return round(num * pow(10.0, digit)) / pow(10.0, digit)
+	
+func _on_VisibilityNotifier_camera_exited(camera):
+	if(not isMovingBall and isRemoveGravityBubble):
+		queue_free()

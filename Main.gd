@@ -147,53 +147,51 @@ func _bubble_collided(bubbleObj):
 		$ScoreCount.score+= 5 + (2 *  (cluster.size() - 3))
 		$ScoreCount.uploadScore()
 		removeClustersNeightbores(cluster)
-		removeClustersWithoutRoof(neighborsCluster,[])
+		removeClustersWithoutRoof(neighborsCluster)
 	shooting = false
 	gen_bubble_shot()
 
-func removeClustersWithoutRoof(neighborsCluster, passedBubbles):
-	var neightBoresBubbles = []
-	var evenBallVert = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1]]
-	var oddBallVert =  [[0,1],[0,-1],[1,0],[-1,0],[-1,-1],[1,-1]]
-	var selectedPosition
+func removeClustersWithoutRoof(neighborsCluster):
 	for ball in neighborsCluster:
-		if(int(ball.globalGridPos.y) % 2 == ( 1 if correFila == false else 0)):
+		var resultBubbleRoofCluster = checkClusterRoof(ball,[])
+		if(not typeof(resultBubbleRoofCluster)==TYPE_BOOL):
+			removeClustersNeightboresFall(resultBubbleRoofCluster)
+
+func checkClusterRoof(bubble,passedBubbles):
+	if(bubble.globalGridPos.y == 0):
+		return false
+	else:
+		passedBubbles.append(bubble)
+	var neighbors : Array = findNeigthboursBubblesRemove([bubble])
+	#Discard the previously checked bubble
+	for checkedBubble in passedBubbles:
+		if(neighbors.has(checkedBubble)):
+			neighbors.remove(neighbors.find(checkedBubble))
+			pass
+	for bubbleNext in neighbors:
+		passedBubbles = checkClusterRoof(bubbleNext, passedBubbles)
+		if(typeof(passedBubbles) == TYPE_BOOL):
+			return false
+	return passedBubbles
+
+func findNeigthboursBubblesRemove(clusterItemsRemove):
+	var neightBoresBubbles = []
+	var evenBallVert = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,1]]
+	var oddBallVert =  [[1,0],[-1,0],[0,1],[0,-1],[-1,-1],[1,-1]]
+	var selectedPosition
+	for bubble in clusterItemsRemove:
+		if(int(bubble.globalGridPos.y) % 2 == ( 1 if correFila == false else 0)):
 			selectedPosition = evenBallVert
 		else:
 			selectedPosition = oddBallVert
 		for positionNeighbor in selectedPosition:
-			if(positionNeighbor[0] + int(ball.globalGridPos.y) < matrPosBub.size()
-			&& positionNeighbor[1] + int(ball.globalGridPos.x) < matrPosBub[0].size()
-			&& positionNeighbor[0] + int(ball.globalGridPos.y) >= 0 
-			&& positionNeighbor[1] + int(ball.globalGridPos.x) >= 0):
-				var yPosition = positionNeighbor[0] + int(ball.globalGridPos.y)
-				var ballClust = matrPosBub[yPosition][positionNeighbor[1] + int(ball.globalGridPos.x)]
-				if(ballClust != null and yPosition != 0):
-					pass
-				elif(ballClust != null and yPosition == 0):
-					print("Es techo")
-					return false
-		return false
-
-func findNeigthboursBubblesRemove(clusterItemsRemove):
-	var neightBoresBubbles = []
-	var evenBallVert = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[-1,1]]
-	var oddBallVert =  [[0,1],[0,-1],[1,0],[-1,0],[-1,-1],[1,-1]]
-	var selectedPosition
-	for itmCluster in clusterItemsRemove:
-		for bubble in clusterItemsRemove:
-			if(int(bubble.globalGridPos.y) % 2 == ( 1 if correFila == false else 0)):
-				selectedPosition = evenBallVert
-			else:
-				selectedPosition = oddBallVert
-			for positionNeighbor in selectedPosition:
-				if(positionNeighbor[0] + int(bubble.globalGridPos.y) < matrPosBub.size()
-				&& positionNeighbor[1] + int(bubble.globalGridPos.x) < matrPosBub[0].size()
-				&& positionNeighbor[0] + int(bubble.globalGridPos.y) >= 0 
-				&& positionNeighbor[1] + int(bubble.globalGridPos.x) >= 0):
-					var bubbleNeigth = matrPosBub[positionNeighbor[0] + int(bubble.globalGridPos.y)][positionNeighbor[1] + int(bubble.globalGridPos.x)]
-					if(bubbleNeigth != null):
-						neightBoresBubbles.append(bubbleNeigth)
+			if(positionNeighbor[0] + int(bubble.globalGridPos.y) < matrPosBub.size()
+			&& positionNeighbor[1] + int(bubble.globalGridPos.x) < matrPosBub[0].size()
+			&& positionNeighbor[0] + int(bubble.globalGridPos.y) >= 0 
+			&& positionNeighbor[1] + int(bubble.globalGridPos.x) >= 0):
+				var bubbleNeigth = matrPosBub[positionNeighbor[0] + int(bubble.globalGridPos.y)][positionNeighbor[1] + int(bubble.globalGridPos.x)]
+				if(bubbleNeigth != null and not neightBoresBubbles.has(bubbleNeigth) and not clusterItemsRemove.has(bubbleNeigth)):
+					neightBoresBubbles.append(bubbleNeigth)
 	return neightBoresBubbles
 
 func getClusterSameColor(matrixCluster, ball):
@@ -216,9 +214,17 @@ func getClusterSameColor(matrixCluster, ball):
 						matrixCluster = getClusterSameColor(matrixCluster,ballClust)
 	return matrixCluster
 
+func removeClustersNeightboresFall(cluster):
+	for object in cluster:
+		if(object != null):
+			matrPosBub[object.globalGridPos.y][object.globalGridPos.x] = null
+			object.isRemoveGravityBubble = true
+			var collitionBubble : CollisionShape = object.get_node("CollisionShape")
+			collitionBubble.queue_free()
+			
 func removeClustersNeightbores(cluster):
 	for object in cluster:
-		if(object != null && cluster.size() >= 3):
+		if(object != null):
 			var particuleEscene = load("res://ParticuleBub.tscn").instance()
 			particuleEscene.translation.x = object.translation.x
 			particuleEscene.translation.y = object.translation.y
